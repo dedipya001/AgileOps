@@ -1,0 +1,150 @@
+.pricing-container {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.three-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.pricing-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+/* HERO */
+
+.pricing-hero {
+  text-align: center;
+  padding: 120px 40px 40px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.pricing-title {
+  font-size: clamp(48px, 6vw, 76px);
+  color: #c084fc;
+  font-weight: 600;
+}
+
+.pricing-subtitle {
+  margin-top: 24px;
+  font-size: 20px;
+  color: #ddd6fe;
+  line-height: 1.6;
+}
+
+/* GRID */
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 40px;
+  padding: 80px;
+}
+
+/* GLASS CARDS */
+
+.pricing-card {
+  position: relative;
+  padding: 40px;
+  border-radius: 28px;
+  backdrop-filter: blur(20px);
+
+  background: linear-gradient(
+    135deg,
+    rgba(153, 51, 255, 0.12),
+    rgba(192, 132, 252, 0.05)
+  );
+
+  border: 1px solid rgba(192, 132, 252, 0.25);
+
+  box-shadow:
+    0 0 40px rgba(153, 51, 255, 0.15),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+
+  transition: transform 0.3s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-10px) scale(1.02);
+}
+
+.pricing-card.highlight {
+  box-shadow:
+    0 0 80px rgba(192, 132, 252, 0.35),
+    inset 0 0 30px rgba(255, 255, 255, 0.08);
+}
+
+/* TEXT */
+
+.pricing-card h2 {
+  color: #c084fc;
+  font-size: 28px;
+}
+
+.users {
+  margin-top: 6px;
+  color: #c4b5fd;
+}
+
+.price {
+  margin: 20px 0;
+  font-size: 40px;
+  font-weight: 600;
+  color: white;
+}
+
+.description {
+  color: #ddd6fe;
+  margin-bottom: 20px;
+}
+
+.pricing-card ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 30px;
+}
+
+.pricing-card li {
+  margin: 8px 0;
+  color: #e9d5ff;
+}
+
+/* FOOTER */
+
+.pricing-footer {
+  text-align: center;
+  padding: 120px 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.pricing-footer h2 {
+  font-size: 42px;
+  color: #c084fc;
+}
+
+.pricing-footer p {
+  margin-top: 20px;
+  font-size: 20px;
+  color: #ddd6fe;
+  line-height: 1.6;
+}
+
+
+.old-price {
+  margin-right: 10px;
+  font-size: 22px;
+  color: #a78bfa;
+  text-decoration: line-through;
+  opacity: 0.7;
+}

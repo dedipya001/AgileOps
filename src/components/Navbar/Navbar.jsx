@@ -1,24 +1,35 @@
 import React, { useEffect, useRef, useState } from "react";
 import { animate } from "framer-motion";
+import { NavLink, useLocation } from "react-router-dom";
 import { cn } from "../../utils/cn";
 import "./Navbar.css";
 
 export default function Navbar({
   items = [
-    { label: "Home", href: "#home" },
-    { label: "About", href: "#about" },
-    { label: "Features", href: "#features" },
-    { label: "Pricing", href: "#pricing" },
-    { label: "Contact", href: "#contact" },
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "Features", path: "/features" },
+    { label: "Pricing", path: "/pricing" },
+    { label: "Contact", path: "/contact" },
   ],
 }) {
   const navRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [hoverX, setHoverX] = useState(null);
-
   const spotlightX = useRef(0);
   const ambienceX = useRef(0);
 
+  const location = useLocation();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [hoverX, setHoverX] = useState(null);
+
+  // ✅ Sync active index with current route
+  useEffect(() => {
+    const index = items.findIndex(
+      (item) => item.path === location.pathname
+    );
+    if (index !== -1) setActiveIndex(index);
+  }, [location.pathname, items]);
+
+  // ✅ Mouse hover spotlight
   useEffect(() => {
     const nav = navRef.current;
     if (!nav) return;
@@ -66,6 +77,7 @@ export default function Navbar({
     };
   }, [activeIndex]);
 
+  // ✅ Animate active ambience bar
   useEffect(() => {
     const nav = navRef.current;
     if (!nav) return;
@@ -98,20 +110,16 @@ export default function Navbar({
         <ul className="spotlight-list">
           {items.map((item, idx) => (
             <li key={idx}>
-              <a
-                href={item.href}
+              <NavLink
+                to={item.path}
                 data-index={idx}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setActiveIndex(idx);
-                }}
-                className={cn(
-                  "spotlight-link",
-                  activeIndex === idx && "active"
-                )}
+                onClick={() => setActiveIndex(idx)}
+                className={({ isActive }) =>
+                  cn("spotlight-link", isActive && "active")
+                }
               >
                 {item.label}
-              </a>
+              </NavLink>
             </li>
           ))}
         </ul>
