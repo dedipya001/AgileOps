@@ -30,8 +30,8 @@ export default function LandingPage() {
   </p>
 
   <div className="hero-actions">
-    <button className="primary-btn">
-      Start Free Trial
+    <button className="primary-btn" onClick={() => window.location.href = "/pricing"}>
+      Get Started
     </button>
 
     <button className="secondary-btn">

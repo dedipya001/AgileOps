@@ -1,16 +1,25 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import PricingPage from "./pages/Pricing/PricingPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 import LandingPage from "./pages/LandingPage/LandingPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
+import PricingPage from "./pages/Pricing/PricingPage";
+import OrgAuthPage from "./pages/Auth/OrgAuthPage";
+
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
+
+        {/* Public marketing pages */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/pricing" element={<PricingPage />} />
+
+        {/* Organization auth */}
+        <Route path="/org/signup" element={<OrgAuthPage />} />
+
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
