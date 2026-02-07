@@ -1,0 +1,45 @@
+.theme-toggle {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  backdrop-filter: blur(14px);
+  background: var(--glass-bg);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+
+  transition: transform 0.25s ease,
+              box-shadow 0.25s ease,
+              background 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.08);
+}
+
+/* Icon animation */
+
+.toggle-icon {
+  font-size: 22px;
+  transition: transform 0.35s ease,
+              opacity 0.3s ease;
+}
+
+/* Purple neon glow in dark mode */
+
+.dark .theme-toggle {
+  box-shadow:
+    0 0 12px rgba(153, 51, 255, 0.4),
+    0 8px 30px rgba(0,0,0,0.4);
+}
