@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import * as THREE from "three";
 import Navbar from "../../components/Navbar/Navbar";
 import ThemeToggle from "../../components/ThemeToggle/ThemeToggle";
@@ -65,6 +66,7 @@ const plans = [
     users: "Up to 5 collaborators",
     oldPrice: "$8",
     price: "$0",
+    link: "/personal/signup",
     description: "Perfect for freelancers and small teams getting started.",
     features: [
       "Single team workspace",
@@ -79,6 +81,8 @@ const plans = [
     users: "Up to 25 collaborators",
     price: "$29",
     highlight: true,
+    link: "/org/signup",
+
     description: "Built for growing startups managing multiple teams.",
     features: [
       "Multiple teams",
@@ -92,6 +96,7 @@ const plans = [
     name: "Business",
     users: "Up to 250 collaborators",
     price: "$79",
+    link: "/org/signup",
     description: "Operational intelligence for scaling organizations.",
     features: [
       "Department structure",
@@ -106,6 +111,8 @@ const plans = [
     users: "Up to 5,000 collaborators",
     price: "Custom",
     description: "Enterprise-grade infrastructure and support.",
+    link: "/org/signup",
+
     features: [
       "Unlimited departments & teams",
       "Custom integrations",
@@ -157,7 +164,7 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <button className="primary-btn" onClick={() => window.location.href = "/org/signup"}>Get Started</button>
+              <button className="primary-btn" onClick={() => window.location.href = plan.link }>Get Started</button>
             </div>
           ))}
         </section>

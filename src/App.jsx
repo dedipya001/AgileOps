@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import AboutPage from "./pages/AboutPage/AboutPage";
 import PricingPage from "./pages/Pricing/PricingPage";
 import OrgAuthPage from "./pages/Auth/OrgAuthPage";
+import PersonalAuthPage from "./pages/Auth/PersonalAuthPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
 
         {/* Organization auth */}
         <Route path="/org/signup" element={<OrgAuthPage />} />
+        <Route path="/personal/signup" element={<PersonalAuthPage />} />
 
       </Routes>
     </Router>
