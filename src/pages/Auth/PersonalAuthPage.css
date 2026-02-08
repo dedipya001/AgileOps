@@ -157,9 +157,8 @@
   transition: all 0.2s ease;
 }
 
-.opName{
-      background: #2596be
-
+.opName {
+  background: #2596be;
 }
 
 .personal-field input:focus,
@@ -458,8 +457,8 @@
   font-weight: 500;
 }
 
-.step-left h2{
-        color: #c084fc;
+.step-left h2 {
+  color: #c084fc;
 }
 
 .launch-tags span svg {
@@ -474,4 +473,38 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+
+/* API Error Banner */
+.api-error-banner {
+  padding: 14px 20px;
+  margin-bottom: 20px;
+  background: rgba(251, 113, 133, 0.15);
+  border: 1px solid rgba(251, 113, 133, 0.5);
+  border-radius: 12px;
+  color: #fb7185;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Spinning loader animation */
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Disabled button state */
+.primary-btn:disabled,
+.secondary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

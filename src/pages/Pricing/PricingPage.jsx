@@ -164,7 +164,7 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <button className="primary-btn" onClick={() => window.location.href = plan.link }>Get Started</button>
+              <button className="primary-btn" onClick={() => window.location.href = plan.link}>Get Started</button>
             </div>
           ))}
         </section>

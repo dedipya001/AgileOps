@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import {
   Target,
   Palette,
@@ -11,11 +12,13 @@ import {
   Rocket,
   Check,
   Sparkles,
+  Loader2,
 } from "lucide-react";
 import Navbar from "../../components/Navbar/Navbar";
 import ThemeToggle from "../../components/ThemeToggle/ThemeToggle";
 import LiquidOcean from "../../components/LiquidOcean/LiquidOcean";
 import AnimatedDashboardBG from "../../components/AnimatedHero/AnimatedHero";
+import { setAuthData } from "../../utils/auth";
 import "./PersonalAuthPage.css";
 
 const steps = ["Profile", "Focus", "Workspace", "Launch"];
@@ -221,17 +224,18 @@ function OptionCard({ title, description, IconComponent, active, onClick }) {
 /* ===================== */
 
 export default function PersonalAuthPage() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [focusMode, setFocusMode] = useState("solo");
   const [cadence, setCadence] = useState("weekly");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const next = () => setStep((value) => Math.min(value + 1, steps.length - 1));
-  const back = () => setStep((value) => Math.max(value - 1, 0));
 
   const activeFocus = useMemo(
     () => focusOptions.find((item) => item.id === focusMode),
@@ -242,6 +246,69 @@ export default function PersonalAuthPage() {
     () => cadenceOptions.find((item) => item.id === cadence),
     [cadence]
   );
+
+  // Handle final submission
+  const onSubmit = async (data) => {
+    setIsSubmitting(true);
+    setApiError("");
+
+    try {
+      // Prepare payload
+      const payload = {
+        fullName: data.fullName,
+        email: data.email,
+        password: data.password,
+        workspaceName: data.workspaceName,
+        role: data.role,
+        timezone: data.timezone,
+        focusMode,
+        cadence,
+        workspaceType: "personal",
+      };
+
+      console.log("Submitting signup:", payload);
+
+      // API call to create workspace
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Signup failed");
+      }
+
+      const result = await response.json();
+
+      // Store auth token and user data
+      setAuthData(result.token, result.user);
+
+      // Store focus preferences for onboarding
+      localStorage.setItem("focusMode", focusMode);
+      localStorage.setItem("cadence", cadence);
+
+      // Navigate to loading screen (start onboarding)
+      navigate("/onboarding/loading");
+    } catch (error) {
+      console.error("Signup error:", error);
+      setApiError(error.message || "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const next = () => {
+    if (step === steps.length - 1) {
+      // Last step - trigger form submission
+      handleSubmit(onSubmit)();
+    } else {
+      setStep((value) => Math.min(value + 1, steps.length - 1));
+    }
+  };
+
+  const back = () => setStep((value) => Math.max(value - 1, 0));
 
   return (
     <div className="personal-auth-container">
@@ -283,6 +350,20 @@ export default function PersonalAuthPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
+            {/* Show API Error */}
+            <AnimatePresence>
+              {apiError && (
+                <motion.div
+                  className="api-error-banner"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                >
+                  {apiError}
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <AnimatePresence mode="wait">
               {/* ========== STEP 0: PROFILE ========== */}
               {step === 0 && (
@@ -348,6 +429,7 @@ export default function PersonalAuthPage() {
                       name="fullName"
                       register={register}
                       placeholder="Alex Rivera"
+                      error={errors.fullName?.message}
                     />
 
                     <Field
@@ -356,6 +438,8 @@ export default function PersonalAuthPage() {
                       name="email"
                       register={register}
                       placeholder="you@studio.com"
+                      type="email"
+                      error={errors.email?.message}
                     />
 
                     <Field
@@ -365,6 +449,7 @@ export default function PersonalAuthPage() {
                       type="password"
                       register={register}
                       placeholder="Create password"
+                      error={errors.password?.message}
                     />
                   </div>
                 </motion.div>
@@ -454,7 +539,7 @@ export default function PersonalAuthPage() {
                         },
                       }}
                     >
-                      {focusOptions.map((option, i) => (
+                      {focusOptions.map((option) => (
                         <motion.div
                           key={option.id}
                           variants={{
@@ -484,7 +569,7 @@ export default function PersonalAuthPage() {
                         },
                       }}
                     >
-                      {cadenceOptions.map((option, i) => (
+                      {cadenceOptions.map((option) => (
                         <motion.div
                           key={option.id}
                           variants={{
@@ -570,6 +655,7 @@ export default function PersonalAuthPage() {
                       name="workspaceName"
                       register={register}
                       placeholder="Alex Studio"
+                      error={errors.workspaceName?.message}
                     />
 
                     <motion.div
@@ -582,11 +668,11 @@ export default function PersonalAuthPage() {
                         <label>Primary role</label>
                       </div>
                       <select {...register("role")}>
-                        <option className="opName">Founder</option>
-                        <option className="opName">Designer</option>
-                        <option className="opName">Developer</option>
-                        <option className="opName">Consultant</option>
-                        <option className="opName">Project Lead</option>
+                        <option value="Founder">Founder</option>
+                        <option value="Designer">Designer</option>
+                        <option value="Developer">Developer</option>
+                        <option value="Consultant">Consultant</option>
+                        <option value="Project Lead">Project Lead</option>
                       </select>
                     </motion.div>
 
@@ -600,12 +686,12 @@ export default function PersonalAuthPage() {
                         <label>Time zone</label>
                       </div>
                       <select {...register("timezone")}>
-                        <option className="opName">GMT -08:00 Pacific</option>
-                        <option  className="opName">GMT -05:00 Eastern</option>
-                        <option  className="opName">GMT +00:00 London</option>
-                        <option className="opName">GMT +01:00 Berlin</option>
-                        <option className="opName">GMT +05:30 India</option>
-                        <option className="opName">GMT +08:00 Singapore</option>
+                        <option value="GMT -08:00 Pacific">GMT -08:00 Pacific</option>
+                        <option value="GMT -05:00 Eastern">GMT -05:00 Eastern</option>
+                        <option value="GMT +00:00 London">GMT +00:00 London</option>
+                        <option value="GMT +01:00 Berlin">GMT +01:00 Berlin</option>
+                        <option value="GMT +05:30 India">GMT +05:30 India</option>
+                        <option value="GMT +08:00 Singapore">GMT +08:00 Singapore</option>
                       </select>
                     </motion.div>
                   </div>
@@ -777,8 +863,9 @@ export default function PersonalAuthPage() {
                 <motion.button
                   className="secondary-btn"
                   onClick={back}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  disabled={isSubmitting}
+                  whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                  whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                 >
                   Back
                 </motion.button>
@@ -786,8 +873,9 @@ export default function PersonalAuthPage() {
               <motion.button
                 className="primary-btn"
                 onClick={next}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                disabled={isSubmitting}
+                whileHover={{ scale: isSubmitting ? 1 : 1.02 }}
+                whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
                 animate={{
                   boxShadow:
                     step === steps.length - 1
@@ -803,7 +891,16 @@ export default function PersonalAuthPage() {
                   repeat: step === steps.length - 1 ? Infinity : 0,
                 }}
               >
-                {step === steps.length - 1 ? "Create Workspace" : "Next"}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={18} className="spinning" />
+                    Creating...
+                  </>
+                ) : step === steps.length - 1 ? (
+                  "Create Workspace"
+                ) : (
+                  "Next"
+                )}
               </motion.button>
             </motion.div>
           </motion.div>

@@ -1,0 +1,122 @@
+.welcome-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.welcome-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(153, 51, 255, 0.15),
+    transparent 70%
+  );
+  animation: welcomePulse 3s ease-in-out infinite;
+}
+
+@keyframes welcomePulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+.welcome-container {
+  text-align: center;
+  max-width: 600px;
+  padding: 60px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.welcome-icon {
+  margin: 0 auto 30px;
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(153, 51, 255, 0.2), rgba(192, 132, 252, 0.1));
+  border-radius: 50%;
+  border: 2px solid rgba(192, 132, 252, 0.5);
+  color: #c084fc;
+  box-shadow: 0 0 60px rgba(192, 132, 252, 0.4);
+}
+
+.welcome-container h1 {
+  font-size: 48px;
+  color: #e9d5ff;
+  margin-bottom: 16px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #e9d5ff, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcome-subtitle {
+  font-size: 18px;
+  color: #c4b5fd;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.welcome-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.welcome-feature {
+  padding: 14px 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(192, 132, 252, 0.25);
+  border-radius: 12px;
+  color: #ddd6fe;
+  font-size: 16px;
+  text-align: left;
+  backdrop-filter: blur(10px);
+}
+
+.welcome-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 40px;
+  font-size: 18px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #9933ff, #c084fc);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 30px rgba(192, 132, 252, 0.6);
+  transition: all 0.3s ease;
+  margin-bottom: 16px;
+}
+
+.welcome-cta:hover {
+  box-shadow: 0 0 50px rgba(192, 132, 252, 0.8);
+}
+
+.welcome-skip {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 1px solid rgba(192, 132, 252, 0.3);
+  border-radius: 12px;
+  color: #a78bfa;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.welcome-skip:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(192, 132, 252, 0.5);
+}
